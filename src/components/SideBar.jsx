@@ -9,7 +9,8 @@ function SideBar() {
     <div style={{
       width: '250px', 
       height: '100vh', 
-      backgroundColor: '#36393F', 
+      // backgroundColor: '#36393F', 
+       backgroundColor: '#2c2f33', 
       display: 'flex', 
       flexDirection: 'column',
       alignItems: 'center',
@@ -29,11 +30,11 @@ function SideBar() {
         <span style={{ color: '#72767d', paddingLeft: '15px', display: 'block', fontSize: '12px', marginBottom: '10px' }}>DIRECT MESSAGES</span>
 
         {/* Example List of Direct Messages */}
-        <a href="/dm/melissa" style={linkStyle}>Friend </a>
-        <a href="/dm/projekti" style={linkStyle}>Friend</a>
-        <a href="/dm/inva" style={linkStyle}>Friend</a>
-        <a href="/dm/lab2" style={linkStyle}>Friend</a>
-        <a href="/dm/web" style={linkStyle}>Friend</a>
+        <a href="/dm/" style={linkStyle}>Friend </a>
+        <a href="/dm/" style={linkStyle}>Friend</a>
+        <a href="/dm/" style={linkStyle}>Friend</a>
+        <a href="/dm/" style={linkStyle}>Friend</a>
+        <a href="/dm/" style={linkStyle}>Friend</a>
         <a href="/dm/athua" style={linkStyle}>Friend</a>
       </div>
 

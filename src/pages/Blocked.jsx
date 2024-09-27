@@ -10,13 +10,13 @@ function Blocked(){
            <div style={{ display: 'flex' }}>
       <SideBar />
 
-      {/* Main Content */}
-      <div style={{ marginLeft: '250px', padding: '20px' }}>
-        <h1 style={{ color: 'black' }}>Main Content</h1>
-        <p style={{ color: 'black' }}>
-          This is the content of the page. It now starts after the sidebar.
-        </p>
-      </div>
+        {/* Main Content */}
+        <div style={{ marginLeft: '250px', padding: '20px', width: '100%', backgroundColor: '#36393F', color: 'white', height: '100vh' }}>
+         
+
+      
+     
+         </div>
     </div>
        </>
     );
