@@ -2,22 +2,56 @@ import React, { useEffect, useState } from "react";
 import TopBar from "../components/TopBar";
 import SideBar from "../components/SideBar";
 import axios from "axios";
-import { FaDiscord } from "react-icons/fa";  // For Discord icon or you can use your avatar
-import { FaRegEdit } from "react-icons/fa";
-
 
 function Profile() {
     const [userData, setUserData] = useState({});
+    const [profilePicture, setProfilePicture] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+
+    // Handle file change for avatar upload
+    const handleFileChange = (e) => {
+        setProfilePicture(e.target.files[0]);
+    };
+
+    
+
+    // Handle the form submission to upload a new profile picture
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        // Create a FormData object to send the file to the backend
+        const formData = new FormData();
+        formData.append("avatar", profilePicture);  // Append the file
+
+        try {
+            const response = await axios.post('http://localhost:8000/api/change/profile/picture', formData, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
+                    'Content-Type': 'multipart/form-data'  // Required for file uploads
+                }
+            });
+
+            // Handle success
+            setSuccessMessage("Profile picture updated successfully!");
+            setErrorMessage("");
+            fetchProfileData();  // Refresh the profile data after uploading
+        } catch (error) {
+            // Handle error
+            setErrorMessage("Error updating profile picture.");
+            setSuccessMessage("");
+        }
+    };
 
     // Fetch the profile data of the authenticated user
     const fetchProfileData = async () => {
         try {
             const response = await axios.get('http://localhost:8000/api/user', {
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('auth_token')}` // Attach token from localStorage
+                    'Authorization': `Bearer ${localStorage.getItem('auth_token')}`  // Attach token from localStorage
                 }
             });
+            console.log(response.data)
             setUserData(response.data);  // Set the user data in the state
         } catch (error) {
             console.error("Error fetching profile data:", error);
@@ -44,7 +78,7 @@ function Profile() {
                     {errorMessage && <p className="text-danger">{errorMessage}</p>}
 
                     {/* Profile Card */}
-                    <div className="card shadow-lg bg-dark border-0 ">
+                    <div className="card shadow-lg bg-dark border-0 ">  
                         {/* Banner */}
                         <div className="rounded-3" style={{ backgroundColor: '#B83A7F', height: '100px' }}></div>
 
@@ -52,42 +86,64 @@ function Profile() {
                         <div className="d-flex justify-content-between align-items-center p-4 ">
                             <div className="d-flex align-items-center">
                                 {/* Avatar */}
-                                <div style={{ marginTop: '-50px', marginRight: '15px' }}>
-                                    <FaDiscord size={80} className="bg-success rounded-circle p-2" style={{ color: 'white' }} />
-                                </div>
-                                <div>
-                                    <h4>{userData.name || "teabinaku"}</h4>
-                                    <span className="text-muted">#0001</span> {/* Placeholder for user ID */}
-                                </div>
+                                
+                                <div style={{  marginRight: '15px' }}>
+                                {userData.avatar ? (
+    <img
+        src={userData.avatar} 
+        className="rounded-circle"
+        style={{ width: '90px', height: '90px' }}
+    />
+) : (
+    <div className="bg-success rounded-circle" style={{ width: '80px', height: '80px' }}>
+        {/* Placeholder Avatar */}
+        <span className="text-white p-2">No Avatar</span>
+    </div>
+)}
+
+</div>
+
+
+                                <form onSubmit={handleSubmit} className="form-group mt-4">
+                                    <label htmlFor="avatar" className="form-label text-secondary">Avatar</label>
+
+                                    {/* File Input */}
+                                    <input
+                                        id="avatar"
+                                        type="file"
+                                        className="form-control"
+                                        onChange={handleFileChange}
+                                        accept="image/*"
+                                        required
+                                    />
+
+                                    <button type="submit" className="btn btn-secondary rounded-5 mt-3">
+                                        +
+                                    </button>
+
+                         
+                                </form>
+                          
                             </div>
-                        
                         </div>
 
                         {/* User Details */}
                         <div className="p-4 text-white rounded-bottom">
-                 
-
-                            {/* Username */}
+               
                             <div className="d-flex justify-content-between align-items-center mb-3">
                                 <div>
                                     <p className="fw-bold mb-1 text-secondary">USERNAME</p>
                                     <p className="text-white mb-0">{userData.name || "teabinaku"}</p>
                                 </div>
-                                <button className="btn btn-dark text-white"><FaRegEdit size={20} />
-                                    </button>
                             </div>
 
                             {/* Email */}
                             <div className="d-flex justify-content-between align-items-center mb-3">
                                 <div>
                                     <p className="fw-bold mb-1 text-secondary">EMAIL</p>
-                                    <p className="text-white mb-0">******@ubt-uni.net <span className="text-primary">Reveal</span></p>
+                                    <p className="text-white mb-0">{userData.email}</p>
                                 </div>
-                                <button className="btn btn-dark text-white"><FaRegEdit size={20} />
-                                </button>
                             </div>
-
-                  
                         </div>
                     </div>
                 </div>
@@ -97,4 +153,3 @@ function Profile() {
 }
 
 export default Profile;
-    

@@ -1,0 +1,24 @@
+/* Custom scrollbar styling */
+.direct-messages-container::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .direct-messages-container::-webkit-scrollbar-track {
+    background-color: #2c2f33; /* Match the sidebar background */
+  }
+  
+  .direct-messages-container::-webkit-scrollbar-thumb {
+    background-color: #000; /* Black scrollbar */
+    border-radius: 10px;
+  }
+  
+  .direct-messages-container::-webkit-scrollbar-thumb:hover {
+    background-color: #333; /* Slightly lighter on hover */
+  }
+  
+  /* Firefox custom scrollbar */
+  .direct-messages-container {
+    scrollbar-width: thin;
+    scrollbar-color: #000 #2c2f33; /* Thumb color and track color */
+  }
+  

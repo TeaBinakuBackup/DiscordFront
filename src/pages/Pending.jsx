@@ -106,7 +106,7 @@ function Pending() {
                                     <FaRegTrashCan size={20} />  {/* Trash icon for rejecting */}
                                 </button>
                             </li>
-                        )) : <li className="list-group-item d-flex shadow-lg justify-content-between align-items-center text-white mb-3 rounded border-0" style={{ backgroundColor: '#2f3136' }}>No sent friend requests.</li>}
+                        )) : <small className="text-secondary">You didn't send any friend request! </small>}
                     </ul>
 
                     {/* Received Friend Requests */}

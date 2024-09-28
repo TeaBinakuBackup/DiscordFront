@@ -15,6 +15,8 @@ import SignUp from './pages/SignUp';
 import axios from 'axios';
 import ProtectedRoute from './ProtectedRoute';
 import Profile from './pages/Profile'
+import MoodStatus from './components/MoodStatus'
+
 
 function App() {
 
