@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import './css/DirectMessages.css'
+import { useNavigate } from 'react-router-dom';
 
 function DirectMessages() {
     const [friends, setFriends] = useState([]); // Initialize as an empty array
+    const navigate = useNavigate();  // Hook to navigate programmatically
 
     useEffect(() => {
         // Fetch the friends data
@@ -16,12 +18,23 @@ function DirectMessages() {
             });
     }, []);
 
+    // Function to handle clicking on a friend
+    const handleFriendClick = (friendId) => {
+        // Navigate to the conversation page and pass the friend's ID
+        navigate(`/conversation/${friendId}`);
+    };
+
     return (
         <div style={{ overflowY: 'auto' }}>
             {friends.length > 0 ? (
                 <div>
                     {friends.map((friend, index) => (
-                        <div key={index} className="card shadow-sm border-0 mb-3" style={{ backgroundColor: '#2c2f33', padding: '10px', borderRadius: '8px' }}>
+                        <div
+                            key={index}
+                            className="card shadow-sm border-0 mb-3"
+                            style={{ backgroundColor: '#2c2f33', padding: '10px', borderRadius: '8px', cursor: 'pointer' }}
+                            onClick={() => handleFriendClick(friend.user1?.id)} // Pass the friend's ID to the handler
+                        >
                             <div className="card-body d-flex align-items-center" style={{ padding: '10px' }}>
                                 {/* Avatar */}
                                 <img
