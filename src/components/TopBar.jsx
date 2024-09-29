@@ -35,42 +35,30 @@ function TopBar() {
     const [unreadCount, setUnreadCount] = useState(0);
   
     useEffect(() => {
-      // Fetch notifications from the API
-      axios.get("http://localhost:8000/api/notifications", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
-        },
-      })
-      .then((response) => {
-        setNotifications(response.data);
-        // Count unread notifications
-        setUnreadCount(response.data.filter((notif) => !notif.read_at).length);
-      })
-      .catch((error) => {
-        console.error("Error fetching notifications:", error);
-      });
+      const fetchNotifications = async () => {
+        try {
+          const response = await axios.get("http://localhost:8000/api/notifications", {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+            },
+          });
+          setNotifications(response.data);
+          setUnreadCount(response.data.length);
+        } catch (error) {
+          console.error("Error fetching notifications:", error);
+        }
+      };
+    
+      // Fetch notifications immediately on component mount
+      fetchNotifications();
+    
+      // Set up polling to check for notifications every 10 seconds
+      const intervalId = setInterval(fetchNotifications, 10000); // 10000ms = 10 seconds
+    
+      // Cleanup the interval when the component is unmounted
+      return () => clearInterval(intervalId);
     }, []);
-  
-    // Function to handle marking notifications as read
-    const markAsRead = async (notificationId) => {
-      try {
-        await axios.post(`http://localhost:8000/api/notifications/${notificationId}/read`, {}, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
-          },
-        });
-        // Update the notifications state and reduce unread count
-        setNotifications((prev) =>
-          prev.map((notif) =>
-            notif.id === notificationId ? { ...notif, read_at: new Date() } : notif
-          )
-        );
-        setUnreadCount((prevCount) => prevCount - 1);
-      } catch (error) {
-        console.error("Error marking notification as read:", error);
-      }
-    };
-
+    
     return (
         <>
             <div style={{ backgroundColor: '#2f3136', height: '60px', display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '0 20px', borderBottom: '1px solid #0000' }}>
@@ -90,7 +78,6 @@ function TopBar() {
                 <Dropdown>
       <Dropdown.Toggle variant="gray" id="dropdown-basic" className="position-relative text-secondary border-0">
         <IoNotifications size={24} />
-        {/* Show badge only if there are unread notifications */}
         {unreadCount > 0 && (
           <Badge bg="danger" pill className="position-absolute top-0 start-100 translate-middle">
             {unreadCount}
@@ -98,23 +85,19 @@ function TopBar() {
         )}
       </Dropdown.Toggle>
 
-      <Dropdown.Menu style={{ width: "300px",background:'#2f3136' }}>
-        <Dropdown.Header>Notifications</Dropdown.Header>
+      <Dropdown.Menu style={{ width: "350px",backgroundColor:'#2f3136'}}>
+        <Dropdown.Header className="text-white">Notifications</Dropdown.Header>
         {notifications.length > 0 ? (
           notifications.map((notification, index) => (
-            <Dropdown.Item
-              key={index}
-              onClick={() => markAsRead(notification.id)}
-              className={`d-flex justify-content-between text-white ${notification.read_at ? "" : "bg-secondary"}`}
-            >
-              <div style={{ maxWidth: "200px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }} className="text-white">
+            <Dropdown.Item key={index} className="d-flex justify-content-between text-secondary">
+              <div style={{ maxWidth: "300px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
                 {notification.data.message}
               </div>
-              {!notification.read_at && <Badge bg="primary">New</Badge>}
+              <Badge bg="info">New</Badge>
             </Dropdown.Item>
           ))
         ) : (
-          <Dropdown.Item className="text-white">No notifications</Dropdown.Item>
+          <Dropdown.Item>No notifications</Dropdown.Item>
         )}
       </Dropdown.Menu>
     </Dropdown>
