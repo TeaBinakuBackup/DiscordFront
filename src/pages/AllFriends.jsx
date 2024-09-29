@@ -72,28 +72,25 @@ function AllFriends() {
     
     // Helper to filter out duplicate friends
     const uniqueFriends = () => {
-        const unique = new Map(); // Map to track unique friends by their friendship ID
+        const unique = new Map(); // Map to track unique friends by their user ID
     
         friends.forEach(friend => {
-            // If user1 is the friend and not the auth user, add to the map with friendship ID
+            // If user1 is the friend and not the auth user, add to the map by user ID
             if (friend.user1 && friend.user1.id !== authUserId) {
-                unique.set(friend.id, { ...friend.user1, friendshipId: friend.id });  // Store friendship ID
+                unique.set(friend.user1.id, { ...friend.user1, friendshipId: friend.id });  // Store user1 by their user ID
             }
-            // If user2 is the friend and not the auth user, add to the map with friendship ID
+            // If user2 is the friend and not the auth user, add to the map by user ID
             if (friend.user2 && friend.user2.id !== authUserId) {
-                unique.set(friend.id, { ...friend.user2, friendshipId: friend.id });  // Store friendship ID
+                unique.set(friend.user2.id, { ...friend.user2, friendshipId: friend.id });  // Store user2 by their user ID
             }
         });
     
-        return Array.from(unique.values()); // Convert Map back to an array
+        return Array.from(unique.values()); // Convert Map back to an array of unique users
     };
     
-console.log(friends)
     return (
         <>
-            <TopBar />
             <div style={{ display: 'flex' }}>
-                <SideBar />
 
                 <div style={{ marginLeft: '250px', padding: '20px', width: '100%', backgroundColor: '#36393F', color: 'white', height: '100vh' }}>
                     <h5 className="text-white mb-3">ALL FRIENDS — {uniqueFriends().length}</h5>

@@ -14,7 +14,7 @@ function Profile() {
         setProfilePicture(e.target.files[0]);
     };
 
-
+    
 
     // Handle the form submission to upload a new profile picture
     const handleSubmit = async (e) => {
@@ -66,10 +66,9 @@ function Profile() {
 
     return (
         <>
-            <TopBar />
+         
             <div style={{ display: 'flex' }}>
-                <SideBar />
-
+     
                 {/* Main Content */}
                 <div style={{ marginLeft: '250px', padding: '20px', width: '100%', backgroundColor: '#36393F', color: 'white', height: '100vh' }}>
                     <h2 className="text-white mb-4">My Account</h2>
