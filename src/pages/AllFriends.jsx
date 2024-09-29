@@ -58,8 +58,8 @@ function AllFriends() {
                                     <div className="d-flex align-items-center">
                                         {/* Avatar */}
                                         <img 
-                                            src="../discord.webp"
-                                            alt="Avatar" 
+                                       src={`${process.env.PUBLIC_URL}/discord.webp`}
+                                        alt="Avatar" 
                                             className="rounded-circle me-3" 
                                             style={{ width: '40px', height: '40px' }} 
                                         />

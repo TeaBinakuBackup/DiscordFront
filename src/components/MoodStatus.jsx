@@ -59,7 +59,7 @@ function MoodStatus(){
           <div className="d-inline">
             <Dropdown drop="up">  {/* This makes the dropdown open upwards */}
                 <Dropdown.Toggle 
-                    variant="secondary" 
+                  variant="gray"
                     id="gear-dropdown-toggle" 
                     className="btn btn-link p-0 border-0"  // Custom styling to match the icon style
                     style={{ backgroundColor: 'transparent' }}  // Ensure background is transparent
@@ -67,13 +67,13 @@ function MoodStatus(){
                     <BsGear size={20} style={{ color: '#b9bbbe' }} />
                 </Dropdown.Toggle>
 
-                <Dropdown.Menu>
+                <Dropdown.Menu style={{background:'#2f3136'}}>
                  
-                    <Dropdown.Item value="1"><FaCircle className="text-info me-1" size={10}/>
+                    <Dropdown.Item value="1" className="text-white"><FaCircle className="text-info me-1" size={10}/>
                             Active</Dropdown.Item>
-                    <Dropdown.Item value="2"><MdDoNotDisturbOn size={10} className="text-danger me-1"/>
+                    <Dropdown.Item value="2" className="text-white"><MdDoNotDisturbOn size={10} className="text-danger me-1"/>
                     Do not Disturb</Dropdown.Item>
-                    <Dropdown.Item value="3"><AiFillEyeInvisible size={10} className="text-secondary me-1"/>
+                    <Dropdown.Item value="3" className="text-white"><AiFillEyeInvisible size={10} className="text-secondary me-1"/>
                     Invisible</Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>

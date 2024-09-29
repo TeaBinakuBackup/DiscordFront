@@ -45,13 +45,14 @@ function DirectMessages() {
                     onClick={() => handleFriendClick(currentFriend?.id, currentFriend?.name)} // Pass both ID and Name
                 >
                     <div className="card-body d-flex align-items-center" style={{ padding: '10px' }}>
-                        {/* Avatar */}
-                        <img
-                            src={currentFriend?.avatar} 
-                            alt="avatar"
-                            className="rounded-circle me-3"
-                            style={{ width: '40px', height: '40px' }}
-                        />
+                    <img
+    src={currentFriend?.avatar ? currentFriend.avatar : '/discord.webp'}
+    alt="Avatar"
+    className="rounded-circle me-3"
+    style={{ width: '40px', height: '40px' }}
+/>
+
+
 
                         {/* Friend Name and Mood Status */}
                         <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -64,7 +65,7 @@ function DirectMessages() {
         })}
     </div>
 ) : (
-    <div>No friends available</div>
+    <div></div>
 )}
 
         </div>
