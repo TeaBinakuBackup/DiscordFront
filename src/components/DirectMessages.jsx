@@ -19,43 +19,54 @@ function DirectMessages() {
     }, []);
 
     // Function to handle clicking on a friend
-    const handleFriendClick = (friendId) => {
+    const handleFriendClick = (friendId,friendName) => {
         // Navigate to the conversation page and pass the friend's ID
-        navigate(`/conversation/${friendId}`);
-    };
+        navigate(`/conversation/${friendId}/${encodeURIComponent(friendName)}`);
+        };
 
     return (
         <div style={{ overflowY: 'auto' }}>
-            {friends.length > 0 ? (
-                <div>
-                    {friends.map((friend, index) => (
-                        <div
-                            key={index}
-                            className="card shadow-sm border-0 mb-3"
-                            style={{ backgroundColor: '#2c2f33', padding: '10px', borderRadius: '8px', cursor: 'pointer' }}
-                            onClick={() => handleFriendClick(friend.user1?.id)} // Pass the friend's ID to the handler
-                        >
-                            <div className="card-body d-flex align-items-center" style={{ padding: '10px' }}>
-                                {/* Avatar */}
-                                <img
-                                    src={friend.user1?.avatar} 
-                                    alt="avatar"
-                                    className="rounded-circle me-3"
-                                    style={{ width: '40px', height: '40px' }}
-                                />
+ {friends.length > 0 ? (
+    <div>
+        {friends.map((friend, index) => {
+            // Check if user1 or user2 is the friend, exclude Auth user
+            const currentFriend = friend.user1?.id === parseInt(localStorage.getItem('auth_user_id'))
+                ? friend.user2 
+                : friend.user1;
 
-                                {/* Friend Name and Mood Status */}
-                                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                    <span className="text-secondary fw-semibold" style={{ fontSize: '16px' }}>{friend.user1?.name}</span>
-                                    <small className="text-secondary" style={{ fontSize: '12px' }}>{friend.user1?.mood_status?.name}</small>
-                                </div>
-                            </div>
+            // Do not display if currentFriend is undefined
+            if (!currentFriend) return null;
+
+            return (
+                <div
+                    key={index}
+                    className="card shadow-sm border-0 mb-3"
+                    style={{ backgroundColor: '#2c2f33', padding: '10px', borderRadius: '8px', cursor: 'pointer' }}
+                    onClick={() => handleFriendClick(currentFriend?.id, currentFriend?.name)} // Pass both ID and Name
+                >
+                    <div className="card-body d-flex align-items-center" style={{ padding: '10px' }}>
+                        {/* Avatar */}
+                        <img
+                            src={currentFriend?.avatar} 
+                            alt="avatar"
+                            className="rounded-circle me-3"
+                            style={{ width: '40px', height: '40px' }}
+                        />
+
+                        {/* Friend Name and Mood Status */}
+                        <div style={{ display: 'flex', flexDirection: 'column' }}>
+                            <span className="text-secondary fw-semibold" style={{ fontSize: '16px' }}>{currentFriend?.name}</span>
+                            <small className="text-secondary" style={{ fontSize: '12px' }}>{currentFriend?.mood_status?.name}</small>
                         </div>
-                    ))}
+                    </div>
                 </div>
-            ) : (
-                <span>No friends available</span>
-            )}
+            );
+        })}
+    </div>
+) : (
+    <div>No friends available</div>
+)}
+
         </div>
     );
 }

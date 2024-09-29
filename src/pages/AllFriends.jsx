@@ -75,7 +75,7 @@ function AllFriends() {
 
                                     {/* Actions (Message and Options) */}
                                     <div>
-                                        <button className="btn border-0 text-white">
+                                        <button className="btn border-0 text-white" >
                                             <IoChatbubbleEllipsesOutline size={25}/>
                                         </button>
                                         <button 

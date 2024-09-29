@@ -14,7 +14,7 @@ function Profile() {
         setProfilePicture(e.target.files[0]);
     };
 
-    
+
 
     // Handle the form submission to upload a new profile picture
     const handleSubmit = async (e) => {
@@ -133,7 +133,7 @@ function Profile() {
                             <div className="d-flex justify-content-between align-items-center mb-3">
                                 <div>
                                     <p className="fw-bold mb-1 text-secondary">USERNAME</p>
-                                    <p className="text-white mb-0">{userData.name || "teabinaku"}</p>
+                                    <p className="text-white mb-0">{userData.name }</p>
                                 </div>
                             </div>
 

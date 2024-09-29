@@ -40,7 +40,8 @@ function App() {
         {/* <Route path="/" element={<Main/>} /> */}
         {/* <Route path="/sidebar" element={<SideBar/>} /> */}
         {/* <Route path="/topbar" element={<TopBar/>} /> */}
-        <Route path="/conversation/:friendId" element={<Conversation />} />
+        <Route path="/conversation/:friendId/:friendName" element={<Conversation />} />
+
         {/* <Route path="/add/friend" element={<AddFriend/>} /> */}
         {/* <Route path="/blocked" element={<Blocked/>} /> */}
         <Route path="/blocked" element={ <ProtectedRoute><Blocked />  </ProtectedRoute>} />

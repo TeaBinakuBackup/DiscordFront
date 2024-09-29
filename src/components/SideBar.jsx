@@ -16,7 +16,7 @@ function SideBar() {
       position: 'fixed',
       left: 0,
       top: 0,
-      overflow: 'hidden'  // Ensure no scrollbar for sidebar container
+      overflow: 'hidden' 
     }}>
       {/* User Avatar/Info */}
       <div style={{ display: 'flex', alignItems: 'center', marginBottom: '30px' }}>
