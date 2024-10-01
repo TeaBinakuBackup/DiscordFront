@@ -85,7 +85,7 @@ function Groupchats() {
                 <h4 className="text-white mb-3">Group Chats</h4>
 
                 {/* Button to open modal */}
-                <Button className="btn border-0 shadow-lg rounded-5 text-white bg-info" onClick={handleModal}>
+                <Button className="btn border-0 shadow-lg rounded-5 text-white bg-primary" onClick={handleModal}>
                     + Add Group Chat
                 </Button>
 

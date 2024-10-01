@@ -127,12 +127,14 @@ function AllFriends() {
                                 style={{ backgroundColor: '#36393F' }}
                             >
                                 <div className="d-flex align-items-center">
-                                    <img 
-                                        src={friend.avatar ? friend.avatar : `${process.env.PUBLIC_URL}/discord.webp`} 
-                                        alt="Avatar" 
-                                        className="rounded-circle me-3" 
-                                        style={{ width: '40px', height: '40px' }} 
-                                    />
+                                <img 
+    src={friend.avatar ? friend.avatar : `${process.env.PUBLIC_URL}/discord.webp`} 
+    alt="Avatar" 
+    className="rounded-circle me-3" 
+    style={{ width: '40px', height: '40px' }} 
+/>
+
+
                                     <div>
                                         <strong>{friend.name}</strong>
                                         <p className="m-0">

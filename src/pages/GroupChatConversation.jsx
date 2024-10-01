@@ -12,7 +12,7 @@ function GroupChatConversation() {
       console.log("Group Chat Name:", groupChatName);
     }, [groupChatId, groupChatName]);
 
-    
+
     const [messages, setMessages] = useState([]); // State for messages
   const [newMessage, setNewMessage] = useState(""); // State for new message input
   const [loading, setLoading] = useState(true); // Loading state for messages
@@ -138,20 +138,6 @@ function GroupChatConversation() {
                         </div>
                       )}
 
-                      {/* Reaction buttons under each message */}
-                      {!message.is_auth_user && (
-                        <div className="d-flex justify-content-start mt-2">
-                          <button className="btn border-0 shadow-sm rounded-5" onClick={() => handleReactToMessage(message.id, 'Laugh')}>
-                            <FaLaugh size={15} className="text-white" />
-                          </button>
-                          <button className="btn border-0 shadow-sm rounded-5" onClick={() => handleReactToMessage(message.id, 'Sad')}>
-                            <FaFrown size={15} className="text-white" />
-                          </button>
-                          <button className="btn border-0 shadow-sm rounded-5" onClick={() => handleReactToMessage(message.id, 'Like')}>
-                            <FaSmile size={15} className="text-white" />
-                          </button>
-                        </div>
-                      )}
                     </div>
                   </div>
                 ))}
