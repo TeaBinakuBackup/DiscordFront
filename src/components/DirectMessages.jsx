@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 function DirectMessages() {
     const [friends, setFriends] = useState([]); // Initialize as an empty array
+    const [groupChats, setgroupChats] = useState([]); // Initialize as an empty array
     const navigate = useNavigate();  // Hook to navigate programmatically
 
     useEffect(() => {
@@ -16,7 +17,28 @@ function DirectMessages() {
             .catch(error => {
                 console.error('Error fetching friends:', error.response);
             });
+    }, []); 
+    
+    
+    useEffect(() => {
+        // Fetch the friends data
+        axios.get('http://localhost:8000/api/user/group-chats')
+            .then(response => {
+                setgroupChats(response.data);  // Set the response data
+            })
+            .catch(error => {
+                console.error('Error fetching friends:', error.response);
+            });
     }, []);
+    const handleGroupChatClick = (groupChatId,groupChatName) => {
+        // Navigate to the conversation page and pass the friend's ID
+        navigate(`/group/conversation/${groupChatId}/${encodeURIComponent(groupChatName)}`);
+
+        };
+
+
+    
+
 
     // Function to handle clicking on a friend
     const handleFriendClick = (friendId,friendName) => {
@@ -68,6 +90,38 @@ function DirectMessages() {
     <div></div>
 )}
 
+<small className="text-secondary ms-3">GROUP CHATS</small>
+
+{groupChats.length > 0 ? (
+    <div>
+        {groupChats.map((chat, index) => {
+            console.log(chat)
+
+            return (
+                <div
+                    key={index}
+                    className="card shadow-sm border-0 mb-3"
+                    style={{ backgroundColor: '#2c2f33', padding: '10px', borderRadius: '8px', cursor: 'pointer' }}
+                    onClick={() => handleGroupChatClick(chat?.id, chat?.name)} // Pass both ID and Name
+                >
+                    <div className="card-body d-flex align-items-center" style={{ padding: '10px' }}>
+
+
+
+
+                        {/* Friend Name and Mood Status */}
+                        <div style={{ display: 'flex', flexDirection: 'column' }}>
+                            <span className="text-secondary fw-semibold" style={{ fontSize: '16px' }}>{chat?.name}</span>
+
+                        </div>
+                    </div>
+                </div>
+            );
+        })}
+    </div>
+) : (
+    <div></div>
+)}
         </div>
     );
 }

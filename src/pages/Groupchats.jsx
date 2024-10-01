@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Modal, Button, Form } from "react-bootstrap";  // Import Modal and Form from react-bootstrap
+import { Modal, Button, Form } from "react-bootstrap";
 
 function Groupchats() {
-    const [showModal, setShowModal] = useState(false);  // To control modal visibility
-    const [groupName, setGroupName] = useState("");  // To store group chat name
-    const [friends, setFriends] = useState([]);  // To store the list of friends
-    const [selectedFriends, setSelectedFriends] = useState([]);  // To store selected friends
+    const [showModal, setShowModal] = useState(false);
+    const [groupName, setGroupName] = useState("");
+    const [friends, setFriends] = useState([]);
+    const [selectedFriends, setSelectedFriends] = useState([]);
+    const [groupChats, setGroupChats] = useState([]);
 
     // Toggle modal visibility
     const handleModal = () => setShowModal(!showModal);
@@ -21,8 +22,23 @@ function Groupchats() {
                 }
             });
             setFriends(response.data);
+            console.log(response.data)
         } catch (error) {
             console.error("Error fetching friends:", error);
+        }
+    };
+
+    // Fetch the user's group chats
+    const fetchGroupChats = async () => {
+        try {
+            const response = await axios.get('http://localhost:8000/api/user/group-chats', {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+                }
+            });
+            setGroupChats(response.data);
+        } catch (error) {
+            console.error("Error fetching group chats:", error);
         }
     };
 
@@ -31,7 +47,7 @@ function Groupchats() {
         e.preventDefault();
         try {
             const response = await axios.post('http://localhost:8000/api/create/group-chat', {
-                groupName: groupName,
+                group_chat_name: groupName,
                 members: selectedFriends
             }, {
                 headers: {
@@ -41,9 +57,10 @@ function Groupchats() {
 
             if (response.status === 200) {
                 alert("Group chat created successfully!");
-                setShowModal(false);  // Close modal on success
-                setGroupName("");  // Reset the group name
-                setSelectedFriends([]);  // Clear selected friends
+                setShowModal(false);
+                setGroupName("");
+                setSelectedFriends([]);
+                fetchGroupChats();  // Fetch updated group chats
             }
         } catch (error) {
             console.error("Error creating group chat:", error);
@@ -56,6 +73,11 @@ function Groupchats() {
             fetchFriends();
         }
     }, [showModal]);
+
+    // Fetch group chats on page load
+    useEffect(() => {
+        fetchGroupChats();
+    }, []);
 
     return (
         <div style={{ display: 'flex' }}>
@@ -70,7 +92,6 @@ function Groupchats() {
                 {/* Modal for creating group chat */}
                 <Modal show={showModal} onHide={handleModal}>
                     <Modal.Header closeButton style={{ backgroundColor: '#36393F', color: 'white' }} className="border-0">
-                        {/* <Modal.Title>Create a Group Chat</Modal.Title> */}
                     </Modal.Header>
                     <Modal.Body style={{ backgroundColor: '#36393F', color: 'white' }}>
                         <Form onSubmit={handleCreateGroupChat}>
@@ -82,7 +103,7 @@ function Groupchats() {
                                     value={groupName}
                                     onChange={(e) => setGroupName(e.target.value)}
                                     required
-                                    style={{ backgroundColor: '#2c2f33', color: 'white' }}  
+                                    style={{ backgroundColor: '#2c2f33', color: 'white' }}
                                 />
                             </Form.Group>
 
@@ -92,11 +113,11 @@ function Groupchats() {
                                     as="select"
                                     multiple
                                     value={selectedFriends}
-                                    onChange={(e) => setSelectedFriends([...e.target.selectedOptions].map(option => option.value))}  // Handle multiple selections
-                                    style={{ backgroundColor: '#2c2f33', color: 'white' }}  // Multi-select styling
+                                    onChange={(e) => setSelectedFriends([...e.target.selectedOptions].map(option => option.value))}
+                                    style={{ backgroundColor: '#2c2f33', color: 'white' }}
                                 >
                                     {friends.map(friend => (
-                                        <option key={friend.id} value={friend.id}>
+                                        <option key={friend.user1?.id} value={friend.user1?.id}>
                                             {friend.user1?.name}
                                         </option>
                                     ))}
@@ -109,6 +130,24 @@ function Groupchats() {
                         </Form>
                     </Modal.Body>
                 </Modal>
+
+                {/* Display group chats */}
+                <div className="mt-5">
+                    <h5 className="text-white">Your Group Chats</h5>
+                    {groupChats.length > 0 ? (
+                        groupChats.map((chat, index) => (
+                            <div key={index} className="card shadow-lg text-white rounded-3 border-0 shadow-sm"
+            style={{ backgroundColor: '#36393F' }}>
+                                <div className="card-body">
+                                    <h5 className="card-title">{chat.name}</h5>
+                                    {/* <p className="card-text">Members: {chat.members.length}</p> */}
+                                </div>
+                            </div>
+                        ))
+                    ) : (
+                        <p className="text-white">You have no group chats yet.</p>
+                    )}
+                </div>
             </div>
         </div>
     );

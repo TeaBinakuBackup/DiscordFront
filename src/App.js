@@ -14,6 +14,7 @@ import Profile from './pages/Profile';
 import ProtectedRoute from './ProtectedRoute';
 import axios from 'axios';
 import Groupchats from './pages/Groupchats';
+import GroupChatConversation from './pages/GroupChatConversation';
 
 function App() {
 
@@ -37,6 +38,8 @@ function App() {
         <Route path="/" element={<ProtectedRoute><MainLayout /></ProtectedRoute>}>
           {/* Nested routes will use the MainLayout with Sidebar and Topbar */}
           <Route path="conversation/:friendId/:friendName" element={<Conversation />} />
+          <Route path="/group/conversation/:groupChatId/:groupChatName" element={<GroupChatConversation />} />
+
           <Route path="add/friend" element={<AddFriend />} />
           <Route path="blocked" element={<Blocked />} />
           <Route path="pending" element={<Pending />} />
