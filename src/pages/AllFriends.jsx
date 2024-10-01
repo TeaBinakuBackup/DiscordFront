@@ -4,7 +4,7 @@ import { Spinner } from 'react-bootstrap'; // Optional: Bootstrap Spinner
 import { IoChatbubbleEllipsesOutline } from "react-icons/io5";
 import { MdBlock } from "react-icons/md";
 import { TbXboxX } from "react-icons/tb";
-
+import { saveAs } from 'file-saver'; // Import file-saver for saving files
 
 function AllFriends() {
     const [friends, setFriends] = useState([]);
@@ -82,80 +82,82 @@ function AllFriends() {
         setLoading(false);  // Start loading before API call
 
     };
-    
-    // Helper to filter out duplicate friends
+
     const uniqueFriends = () => {
         const unique = new Map(); // Map to track unique friends by their user ID
     
         friends.forEach(friend => {
-            // If user1 is the friend and not the auth user, add to the map by user ID
             if (friend.user1 && friend.user1.id !== authUserId) {
-                unique.set(friend.user1.id, { ...friend.user1, friendshipId: friend.id });  // Store user1 by their user ID
+                unique.set(friend.user1.id, { ...friend.user1, friendshipId: friend.id });
             }
-            // If user2 is the friend and not the auth user, add to the map by user ID
             if (friend.user2 && friend.user2.id !== authUserId) {
-                unique.set(friend.user2.id, { ...friend.user2, friendshipId: friend.id });  // Store user2 by their user ID
+                unique.set(friend.user2.id, { ...friend.user2, friendshipId: friend.id });
             }
         });
     
         return Array.from(unique.values()); // Convert Map back to an array of unique users
     };
-    
+
+    // Export data as JSON
+    const exportData = () => {
+        const data = JSON.stringify(uniqueFriends(), null, 2); // Convert friends data to JSON
+        const blob = new Blob([data], { type: 'application/json' });
+        saveAs(blob, 'friends_data.json'); // Trigger download of JSON file
+    };
+
     return (
         <>
             <div style={{ display: 'flex' }}>
-
                 <div style={{ marginLeft: '250px', padding: '20px', width: '100%', backgroundColor: '#36393F', color: 'white', height: '100vh' }}>
                     <h5 className="text-white mb-3">ALL FRIENDS — {uniqueFriends().length}</h5>
+                    
+                    <button onClick={exportData} className="btn btn-success mb-3">Export Friends Data</button> {/* Export Button */}
 
-
-{loading? (
-        <div className="text-center">
-        <Spinner animation="border" role="status" style={{ color: 'white' }}>
-            <span className="visually-hidden">Loading...</span>
-        </Spinner>
-    </div>
-):(
-    uniqueFriends().map((friend, index) => (
-        <li 
-            key={index} 
-            className="list-group-item d-flex justify-content-between align-items-center p-3 mb-3 shadow-lg text-white rounded-3 border-0 shadow-sm"
-            style={{ backgroundColor: '#36393F' }}
-        >
-            <div className="d-flex align-items-center">
-                <img 
-                    src={friend.avatar ? friend.avatar : `${process.env.PUBLIC_URL}/discord.webp`} 
-                    alt="Avatar" 
-                    className="rounded-circle me-3" 
-                    style={{ width: '40px', height: '40px' }} 
-                />
-                <div>
-                    <strong>{friend.name}</strong>
-                    <p className="m-0">
-                        {friend.mood_status?.name}
-                    </p>
-                </div>
-            </div>
-    
-            <div>
-                <button className="btn border-0 text-white">
-                    <IoChatbubbleEllipsesOutline size={25} />
-                </button>
-                <button className="btn border-0 text-danger" onClick={() => removeUser(friend.friendshipId)}> {/* Pass friendshipId */}
-                    <TbXboxX size={25} />
-                </button>
-                <button 
-                    className="btn border-0 text-danger"
-                    onClick={() => blockUser(friend.friendshipId)}  
-                >
-                    <MdBlock size={25} />
-                </button>
-            </div>
-        </li>
-    ))
-)}
-       
-
+                    {loading? (
+                        <div className="text-center">
+                            <Spinner animation="border" role="status" style={{ color: 'white' }}>
+                                <span className="visually-hidden">Loading...</span>
+                            </Spinner>
+                        </div>
+                    ) : (
+                        uniqueFriends().map((friend, index) => (
+                            <li 
+                                key={index} 
+                                className="list-group-item d-flex justify-content-between align-items-center p-3 mb-3 shadow-lg text-white rounded-3 border-0 shadow-sm"
+                                style={{ backgroundColor: '#36393F' }}
+                            >
+                                <div className="d-flex align-items-center">
+                                    <img 
+                                        src={friend.avatar ? friend.avatar : `${process.env.PUBLIC_URL}/discord.webp`} 
+                                        alt="Avatar" 
+                                        className="rounded-circle me-3" 
+                                        style={{ width: '40px', height: '40px' }} 
+                                    />
+                                    <div>
+                                        <strong>{friend.name}</strong>
+                                        <p className="m-0">
+                                            {friend.mood_status?.name}
+                                        </p>
+                                    </div>
+                                </div>
+                        
+                                <div>
+                                    <button className="btn border-0 text-white">
+                                        <IoChatbubbleEllipsesOutline size={25} />
+                                    </button>
+                                    <button className="btn border-0 text-danger" onClick={() => removeUser(friend.friendshipId)}>
+                                        <TbXboxX size={25} />
+                                    </button>
+                                    <button 
+                                        className="btn border-0 text-danger"
+                                        onClick={() => blockUser(friend.friendshipId)}
+                                    >
+                                        <MdBlock size={25} />
+                                    </button>
+                                </div>
+                            </li>
+                        ))
+                    )}
                 </div>
             </div>
         </>
