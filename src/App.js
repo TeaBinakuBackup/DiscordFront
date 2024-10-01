@@ -13,6 +13,7 @@ import SignUp from './pages/SignUp';
 import Profile from './pages/Profile';
 import ProtectedRoute from './ProtectedRoute';
 import axios from 'axios';
+import Groupchats from './pages/Groupchats';
 
 function App() {
 
@@ -41,6 +42,8 @@ function App() {
           <Route path="pending" element={<Pending />} />
           <Route path="all/friends" element={<AllFriends />} />
           <Route path="profile" element={<Profile />} />
+          <Route path="/group/chat" element={<Groupchats />} />
+          
         </Route>
 
         {/* Routes without the layout (e.g., login and signup) */}
